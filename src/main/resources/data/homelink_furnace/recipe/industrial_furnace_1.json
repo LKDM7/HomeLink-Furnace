@@ -1,0 +1,33 @@
+{
+    "key":  {
+                "M":  {
+                          "item":  "homecore:homelink_control_module"
+                      },
+                "F":  {
+                          "item":  "minecraft:furnace"
+                      },
+                "B":  {
+                          "item":  "homecore:homelink_circuit_board"
+                      },
+                "I":  {
+                          "item":  "minecraft:iron_ingot"
+                      },
+                "C":  {
+                          "item":  "minecraft:copper_ingot"
+                      },
+                "R":  {
+                          "item":  "minecraft:redstone"
+                      }
+            },
+    "pattern":  [
+                    "ICI",
+                    "MFB",
+                    "IRI"
+                ],
+    "result":  {
+                   "id":  "homelink_furnace:industrial_furnace_1",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shaped",
+    "category":  "misc"
+}

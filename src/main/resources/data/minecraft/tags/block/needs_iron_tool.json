@@ -1,0 +1,8 @@
+{
+    "replace":  false,
+    "values":  [
+                   "homelink_furnace:industrial_furnace_1",
+                   "homelink_furnace:industrial_furnace_2",
+                   "homelink_furnace:industrial_furnace_3"
+               ]
+}

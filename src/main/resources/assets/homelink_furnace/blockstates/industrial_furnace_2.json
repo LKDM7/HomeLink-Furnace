@@ -1,0 +1,164 @@
+{
+    "variants":  {
+                     "facing=north,column=0,layer=0,row=0":  {
+                                                                 "y":  0,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=east,column=0,layer=0,row=0":  {
+                                                                "y":  90,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=south,column=0,layer=0,row=0":  {
+                                                                 "y":  180,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=west,column=0,layer=0,row=0":  {
+                                                                "y":  270,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=north,column=1,layer=0,row=0":  {
+                                                                 "y":  0,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_1_0_0"
+                                                             },
+                     "facing=east,column=1,layer=0,row=0":  {
+                                                                "y":  90,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_1_0_0"
+                                                            },
+                     "facing=south,column=1,layer=0,row=0":  {
+                                                                 "y":  180,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_1_0_0"
+                                                             },
+                     "facing=west,column=1,layer=0,row=0":  {
+                                                                "y":  270,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_1_0_0"
+                                                            },
+                     "facing=north,column=0,layer=0,row=1":  {
+                                                                 "y":  0,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=east,column=0,layer=0,row=1":  {
+                                                                "y":  90,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=south,column=0,layer=0,row=1":  {
+                                                                 "y":  180,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=west,column=0,layer=0,row=1":  {
+                                                                "y":  270,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=north,column=0,layer=1,row=0":  {
+                                                                 "y":  0,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=east,column=0,layer=1,row=0":  {
+                                                                "y":  90,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=south,column=0,layer=1,row=0":  {
+                                                                 "y":  180,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=west,column=0,layer=1,row=0":  {
+                                                                "y":  270,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=north,column=0,layer=1,row=1":  {
+                                                                 "y":  0,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=east,column=0,layer=1,row=1":  {
+                                                                "y":  90,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=south,column=0,layer=1,row=1":  {
+                                                                 "y":  180,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=west,column=0,layer=1,row=1":  {
+                                                                "y":  270,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=north,column=1,layer=0,row=1":  {
+                                                                 "y":  0,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=east,column=1,layer=0,row=1":  {
+                                                                "y":  90,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=south,column=1,layer=0,row=1":  {
+                                                                 "y":  180,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=west,column=1,layer=0,row=1":  {
+                                                                "y":  270,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=north,column=1,layer=1,row=0":  {
+                                                                 "y":  0,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=east,column=1,layer=1,row=0":  {
+                                                                "y":  90,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=south,column=1,layer=1,row=0":  {
+                                                                 "y":  180,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=west,column=1,layer=1,row=0":  {
+                                                                "y":  270,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=north,column=1,layer=1,row=1":  {
+                                                                 "y":  0,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=east,column=1,layer=1,row=1":  {
+                                                                "y":  90,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            },
+                     "facing=south,column=1,layer=1,row=1":  {
+                                                                 "y":  180,
+                                                                 "uvlock":  true,
+                                                                 "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                             },
+                     "facing=west,column=1,layer=1,row=1":  {
+                                                                "y":  270,
+                                                                "uvlock":  true,
+                                                                "model":  "homelink_furnace:block/industrial_furnace_2_0_0_0"
+                                                            }
+                 }
+}

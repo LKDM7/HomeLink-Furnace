@@ -1,0 +1,36 @@
+{
+    "key":  {
+                "I":  {
+                          "item":  "minecraft:iron_ingot"
+                      },
+                "G":  {
+                          "item":  "minecraft:gold_ingot"
+                      },
+                "B":  {
+                          "item":  "minecraft:copper_ingot"
+                      },
+                "F":  {
+                          "item":  "homelink_furnace:industrial_furnace_1"
+                      },
+                "C":  {
+                          "item":  "homecore:homelink_communication_module"
+                      },
+                "P":  {
+                          "item":  "homecore:homelink_microprocessor"
+                      },
+                "M":  {
+                          "item":  "homecore:homelink_control_module"
+                      }
+            },
+    "pattern":  [
+                    "GPG",
+                    "MFC",
+                    "IBI"
+                ],
+    "result":  {
+                   "id":  "homelink_furnace:industrial_furnace_2",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shaped",
+    "category":  "misc"
+}

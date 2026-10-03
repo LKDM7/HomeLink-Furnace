@@ -1,0 +1,11 @@
+# Exemple MCP pour Codex sous Windows avec Ruflo 3.42.4 installé globalement.
+# Codex charge .codex/config.toml ; il ne charge pas ce fichier automatiquement.
+# Copier ce bloc dans .codex/config.toml lors de la configuration d'une machine.
+# Ne pas modifier les préférences de modèle ou de permissions pour installer Ruflo.
+
+[mcp_servers.ruflo]
+command = "cmd"
+args = ["/d", "/c", "ruflo", "mcp", "start"]
+enabled = true
+startup_timeout_sec = 60
+tool_timeout_sec = 120

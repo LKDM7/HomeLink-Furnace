@@ -1,0 +1,36 @@
+{
+    "key":  {
+                "I":  {
+                          "item":  "minecraft:iron_block"
+                      },
+                "C":  {
+                          "item":  "homecore:homelink_communication_module"
+                      },
+                "F":  {
+                          "item":  "homelink_furnace:industrial_furnace_2"
+                      },
+                "B":  {
+                          "item":  "minecraft:copper_block"
+                      },
+                "N":  {
+                          "item":  "minecraft:netherite_ingot"
+                      },
+                "D":  {
+                          "item":  "minecraft:diamond"
+                      },
+                "M":  {
+                          "item":  "homecore:homelink_control_module"
+                      }
+            },
+    "pattern":  [
+                    "DMB",
+                    "CFM",
+                    "INI"
+                ],
+    "result":  {
+                   "id":  "homelink_furnace:industrial_furnace_3",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shaped",
+    "category":  "misc"
+}

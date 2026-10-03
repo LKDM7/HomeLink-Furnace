@@ -1,0 +1,68 @@
+name: Build and server verification
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: read
+concurrency:
+  group: furnace-ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: consumer
+    env:
+      GITHUB_ACTOR: ${{ github.actor }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HOMELINK_PACKAGES_TOKEN: ${{ secrets.HOMELINK_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: consumer
+          persist-credentials: false
+      - name: Checkout HomeCore 1.14.0 with official UI Kit
+        uses: actions/checkout@v4
+        with:
+          repository: LKDM7/HomeCore
+          ref: 34db0a68f0c1e2e88e8b807a6165005edd85b431
+          path: HomeCore
+          token: ${{ secrets.HOMELINK_REPOSITORIES_TOKEN || secrets.HOMELINK_PACKAGES_TOKEN || github.token }}
+          persist-credentials: false
+      - name: Checkout HomeLink Energy 0.5.0
+        uses: actions/checkout@v4
+        with:
+          repository: LKDM7/HomeLink-Energy
+          ref: 57620158b6e29f47bccf951a6c253295dda73602
+          path: HomeLinkEnergy
+          token: ${{ secrets.HOMELINK_REPOSITORIES_TOKEN || secrets.HOMELINK_PACKAGES_TOKEN || github.token }}
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build, unit tests and JAR verification
+        run: bash gradlew build test verifyReleaseJar -PuseLocalDependencies=true --no-daemon --no-configuration-cache
+      - name: Server GameTests
+        run: bash gradlew runGameTestServer -PuseLocalDependencies=true --no-daemon --no-configuration-cache
+      - name: Preserve reports and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: furnace-validation
+          path: |
+            consumer/build/reports/
+            consumer/build/test-results/
+            consumer/build/gametest/logs/
+            consumer/build/validation/**/logs/
+      - name: Preserve release JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: furnace-jars
+          path: consumer/build/libs/*.jar

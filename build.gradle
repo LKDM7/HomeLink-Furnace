@@ -1,0 +1,206 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'idea'
+    id 'net.neoforged.moddev' version '2.0.148'
+}
+version = mod_version
+group = mod_group_id
+base { archivesName = mod_id }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+repositories {
+    maven {
+        name = 'HomeCorePackages'
+        url = uri('https://maven.pkg.github.com/LKDM7/HomeCore')
+        credentials {
+            username = providers.gradleProperty('githubUser').orElse(providers.environmentVariable('GITHUB_ACTOR')).getOrElse('')
+            password = providers.gradleProperty('githubToken').orElse(providers.environmentVariable('HOMELINK_PACKAGES_TOKEN')).orElse(providers.environmentVariable('GITHUB_TOKEN')).getOrElse('')
+        }
+        content { includeGroup 'fr.lkdm.homecore' }
+    }
+
+    maven {
+        name = 'EnergyPackages'
+        url = uri('https://maven.pkg.github.com/LKDM7/HomeLink-Energy')
+        credentials {
+            username = providers.gradleProperty('githubUser').orElse(providers.environmentVariable('GITHUB_ACTOR')).getOrElse('')
+            password = providers.gradleProperty('githubToken').orElse(providers.environmentVariable('HOMELINK_PACKAGES_TOKEN')).orElse(providers.environmentVariable('GITHUB_TOKEN')).getOrElse('')
+        }
+        content { includeGroup 'fr.lkdm.homelink.energy' }
+    }
+
+    mavenCentral()
+    maven { url = 'https://maven.blamejared.com/'; content { includeGroup 'mezz.jei'; includeGroup 'net.mezzdev.config' } }
+    maven { url = 'https://maven.shedaniel.me/'; content { includeGroup 'me.shedaniel'; includeGroup 'me.shedaniel.cloth' } }
+    maven { url = 'https://maven.architectury.dev/'; content { includeGroup 'dev.architectury' } }
+    maven { url = 'https://maven.fabricmc.net/'; content { includeGroup 'net.fabricmc' } }
+
+}
+def withStorage = providers.gradleProperty('withStorage').isPresent()
+// JEI and REI are optional client integrations: compiled against their APIs, never embedded or required.
+// Pass -PwithJei or -PwithRei to load one of them in development runs.
+def withJei = providers.gradleProperty('withJei').isPresent()
+def withRei = providers.gradleProperty('withRei').isPresent()
+dependencies {
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
+    // Information pages use REI's built-in display type, shipped in the full REI artifact.
+    compileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}") { transitive = false }
+    // REI annotates its API with net.fabricmc.api.Environment; only that annotation type is needed to compile.
+    compileOnly("net.fabricmc:fabric-loader:0.16.14") { transitive = false }
+    if (withJei) runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    if (withRei) runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    implementation "fr.lkdm.homecore:homecore:${homecore_version}"
+    // Required at runtime: the furnace only runs on HE supplied by HomeLink Energy networks.
+    runtimeOnly "fr.lkdm.homelink.energy:homelink_energy:${energy_version}"
+    // Only for the in-game check against actual Storage Pipes; never part of the release metadata.
+    if (withStorage) runtimeOnly "fr.lkdm.homelink.storage:homelink_storage:${storage_version}"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    // Tests reading project files (translations) resolve them from here.
+    systemProperty 'homelink_furnace.projectDir', project.projectDir.absolutePath
+    testLogging { events 'passed', 'failed', 'skipped' }
+}
+// Development-only GameTests, shipped as a separate mod that never enters the release JAR.
+sourceSets {
+    verification {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+configurations {
+    verificationImplementation.extendsFrom implementation
+    verificationRuntimeOnly.extendsFrom runtimeOnly
+    verificationCompileOnly.extendsFrom compileOnly
+}
+if (withStorage) {
+    sourceSets {
+        storageVerification {
+            compileClasspath += sourceSets.main.output + sourceSets.verification.output
+            runtimeClasspath += sourceSets.main.output + sourceSets.verification.output
+        }
+    }
+    configurations {
+        storageVerificationImplementation.extendsFrom implementation
+        storageVerificationRuntimeOnly.extendsFrom runtimeOnly
+        storageVerificationCompileOnly.extendsFrom compileOnly
+    }
+    dependencies { storageVerificationImplementation "fr.lkdm.homelink.storage:homelink_storage:${storage_version}" }
+}
+neoForge {
+    version = project.neo_version
+    accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'))
+    addModdingDependenciesTo sourceSets.verification
+    if (withStorage) addModdingDependenciesTo sourceSets.storageVerification
+    mods {
+        "${mod_id}" { sourceSet sourceSets.main }
+        furnace_validation { sourceSet sourceSets.verification; if (withStorage) sourceSet sourceSets.storageVerification }
+    }
+    runs {
+        client { client(); loadedMods = [mods.homelink_furnace] }
+        server { server(); programArgument '--nogui'; loadedMods = [mods.homelink_furnace] }
+        smoke {
+            client()
+            systemProperty 'furnace.smoke', 'true'
+            systemProperty 'furnace.withStorage', withStorage.toString()
+            programArguments.addAll('--width', '1280', '--height', '720')
+            loadedMods = [mods.homelink_furnace, mods.furnace_validation]
+            gameDirectory = file('build/validation/client')
+        }
+        gameTestServer {
+            type = 'gameTestServer'
+            loadedMods = [mods.homelink_furnace, mods.furnace_validation]
+            gameDirectory = file('build/validation/gametest')
+            systemProperty 'neoforge.enabledGameTestNamespaces', 'furnace_validation'
+        }
+        configureEach { logLevel = org.slf4j.event.Level.INFO }
+    }
+}
+def gameTestProperties = layout.buildDirectory.file('validation/gametest/server.properties')
+tasks.named('runGameTestServer') {
+    doFirst {
+        def config = gameTestProperties.get().asFile
+        if (!config.exists()) { config.parentFile.mkdirs(); config.setText('', 'UTF-8') }
+    }
+}
+def smokeOptions = layout.buildDirectory.file('validation/client/options.txt')
+def smokeLanguage = providers.gradleProperty('smokeLanguage').getOrElse('fr_fr')
+def smokeLog = layout.buildDirectory.file('validation/client/logs/latest.log')
+tasks.named('runSmoke') {
+    doFirst {
+        def options = smokeOptions.get().asFile
+        options.parentFile.mkdirs()
+        options.setText("onboardAccessibility:false\ntutorialStep:none\npauseOnLostFocus:false\nrenderDistance:6\nsimulationDistance:5\nmaxFps:60\nguiScale:2\nlang:${smokeLanguage}\n", 'UTF-8')
+    }
+    doLast {
+        def log = smokeLog.get().asFile.getText('UTF-8')
+        if (!log.contains('FURNACE_SMOKE_OK') || log.contains('FURNACE_SMOKE_FAILED')) {
+            throw new GradleException('Furnace client verification failed; inspect build/validation/client/logs/latest.log')
+        }
+    }
+}
+def generateModMetadata =tasks.register('generateModMetadata', ProcessResources) {
+    def values = ['minecraft_version_range', 'neo_version_range', 'loader_version_range',
+                  'mod_id', 'mod_name', 'mod_license', 'mod_version', 'mod_authors', 'mod_description', 'homecore_version_range', 'energy_version_range', 'jei_version_range', 'rei_version_range']
+            .collectEntries { [(it): project.property(it)] }
+    inputs.properties values
+    expand values
+    from 'src/main/templates'
+    into layout.buildDirectory.dir('generated/sources/modMetadata')
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 21 }
+tasks.withType(Jar).configureEach {
+    from(['LICENSE', 'NOTICE']) { into 'META-INF' }
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+tasks.named('check') { dependsOn tasks.named('verificationClasses') }
+def releaseJar = tasks.named('jar', Jar).flatMap { it.archiveFile }
+tasks.register('verifyReleaseJar') {
+    dependsOn tasks.named('jar')
+    inputs.file releaseJar
+    doLast {
+        def archive = new java.util.zip.ZipFile(releaseJar.get().asFile)
+        try {
+            def names = archive.entries().collect { it.name }
+            if (names.any { it.startsWith('fr/lkdm/homecore/') || it.startsWith('fr/lkdm/homelink/storage/')
+                    || it.startsWith('fr/lkdm/homelink/furnace/verification/') || it.startsWith('data/furnace_validation/') }) {
+                throw new GradleException('Dependency or validation classes must not be embedded in Furnace.')
+            }
+            for (def path : ['fr/lkdm/homelink/furnace/HomeLinkFurnace.class', 'META-INF/neoforge.mods.toml', 'assets/homelink_furnace/lang/en_us.json', 'assets/homelink_furnace/lang/fr_fr.json', 'META-INF/LICENSE']) {
+                if (!names.contains(path)) throw new GradleException("Missing JAR entry: ${path}")
+            }
+            def metadata = archive.getInputStream(archive.getEntry('META-INF/neoforge.mods.toml')).withCloseable { it.getText('UTF-8') }
+            if (!metadata.contains('modId="homecore"') || metadata.contains('${')) throw new GradleException('Invalid HomeCore dependency metadata.')
+        } finally { archive.close() }
+    }
+}
+tasks.named('check') { dependsOn tasks.named('verifyReleaseJar') }
+
+def homecoreJarName = "homecore-${homecore_version}.jar"
+def energyJarName = "homelink_energy-${energy_version}.jar"
+tasks.register('releaseBundle', Sync) {
+    group = 'build'
+    description = 'Collects Furnace and its required HomeCore and Energy dependencies, with installation docs.'
+    dependsOn tasks.named('build')
+    into layout.buildDirectory.dir('release')
+    from(releaseJar)
+    from(configurations.runtimeClasspath.filter { it.name == homecoreJarName || it.name == energyJarName })
+    from('README.md', 'CHANGELOG.md', 'LICENSE', 'NOTICE')
+    from('docs') { into 'docs' }
+}
+// Unit tests run against the Minecraft classpath (Gson, resources) without starting a game.
+neoForge {
+    unitTest {
+        enable()
+        testedMod = mods."${mod_id}"
+    }
+}
