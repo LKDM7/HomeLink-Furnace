@@ -3,10 +3,10 @@
 Industrial electric furnaces for the HomeLink ecosystem. V1 processes actual
 server SMELTING recipes in parallel, including compatible datapack and mod recipes.
 
-**HomeLink Furnace n’accepte aucun combustible.** There is no fuel slot, FE/RF
+**HomeLink Furnace accepts no fuel.** There is no fuel slot, FE/RF
 conversion, energy generation, offline catch-up or forced chunk loading.
 
-Version **0.1.0**, Apache-2.0, author LKDM. Requires Minecraft **1.21.1**, Java **21**,
+Version **0.1.0**, All Rights Reserved, author LKDM. Requires Minecraft **1.21.1**, Java **21**,
 NeoForge **21.1.252**, **HomeCore 1.14.0** (Dashboard API 1.9.0) and **HomeLink Energy
 0.5.0**. Install the three separate mod JARs. HomeCore and Energy are not bundled.
 
